@@ -1,9 +1,13 @@
 import styled from 'styled-components';
 import {GlobalStyle} from './global-style'
 import { FC } from 'react';
+import { Card } from './card';
 
 const Root = styled.div`
-  padding: 12px;
+  padding: 48px 24px;
+  width: 80vw;
+  max-width: 900px;
+  margin: 0 auto;
 `
 
 export const App: FC = () => {
@@ -11,7 +15,7 @@ export const App: FC = () => {
     <>
     <GlobalStyle/>
     <Root>
-      <be-icon name='ak:image' size="64" color="#333" stroke="1.8" />
+      <Card name='ak:air'/>
     </Root>
     </>
   );
