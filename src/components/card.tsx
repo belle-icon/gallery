@@ -58,6 +58,9 @@ export const Card: FC<Props> = (props) => {
       <IconPart>
         <be-icon name={props.name} size="40" color="currentColor" stroke="1.8" />
       </IconPart>
+      <LabelPart>
+        {props.name}
+      </LabelPart>
     </Container>
   )
 }
