@@ -28,6 +28,7 @@ const LabelPart = styled.div`
   vertical-align: middle;
   bottom: 10px;
   opacity: 1;
+  user-select: none;
   transition: all ease-out 0.2s;
 `
 
