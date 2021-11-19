@@ -18,6 +18,8 @@ interface cellArgs {
   style: any;
 }
 
+const CONTAINER_SIZE = 150;
+
 export const App: FC = () => {
   return (
     <>
@@ -28,11 +30,11 @@ export const App: FC = () => {
             {({ height, width }) => {
               return (
                 <Grid
-                  columnCount={Math.floor(width/180)}
-                  columnWidth={180}
+                  columnCount={Math.floor(width/CONTAINER_SIZE)}
+                  columnWidth={CONTAINER_SIZE}
                   height={height}
                   rowCount={1000}
-                  rowHeight={180}
+                  rowHeight={CONTAINER_SIZE}
                   width={width}
                   style={{ overflowX: "hidden" }}
                 >
