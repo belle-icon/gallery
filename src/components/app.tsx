@@ -4,12 +4,14 @@ import { FC } from 'react';
 import { Card } from './card';
 import { FixedSizeGrid as Grid } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
+import { Tabs } from './tabs';
 
 const Root = styled.div`
   padding: 48px 24px;
   width: 80vw;
   max-width: 900px;
   margin: 0 auto;
+  font-family: "PingFang SC";
 `;
 
 interface cellArgs {
@@ -25,6 +27,7 @@ export const App: FC = () => {
     <>
       <GlobalStyle />
       <Root>
+        <Tabs/>
         <div style={{ width: "100%", height:"800px" }}>
           <AutoSizer>
             {({ height, width }) => {
