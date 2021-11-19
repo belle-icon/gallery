@@ -29,12 +29,14 @@ const Container = styled.div`
   width: 120px;
   height: 120px;
   border-radius: 30px;
-  border: solid 4px #4E5969;
+  border: solid 4px #D3D3D3;
   box-shadow: 3px 3px 13px 0px rgb(0 0 0 / 2%);
   background-color: #ffffff;
   position: relative;
   box-sizing: border-box;
+  transition: border-color ease-out 0.2s;
   &:hover {
+    border-color: #4E5969;
     ${IconPart} {
       transform: translateY(-12px);
     }
