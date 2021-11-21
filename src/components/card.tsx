@@ -1,5 +1,7 @@
-import React, {FC} from 'react'
+import React, { FC } from 'react'
+import { useStore } from 'reto'
 import styled from 'styled-components'
+import { SelectionStore } from '../stores/selection.store'
 
 const IconPart = styled.div`
   display: flex;
@@ -17,7 +19,7 @@ const LabelPart = styled.div`
   font-size: 12px;
   word-break: break-word;
   text-align: center;
-  color: #4E5969;
+  color: #4e5969;
   vertical-align: middle;
   bottom: 10px;
   opacity: 0;
@@ -29,14 +31,15 @@ const Container = styled.div`
   width: 120px;
   height: 120px;
   border-radius: 30px;
-  border: solid 4px #D3D3D3;
+  border: solid 4px #d3d3d3;
   box-shadow: 3px 3px 13px 0px rgb(0 0 0 / 2%);
   background-color: #ffffff;
   position: relative;
   box-sizing: border-box;
   transition: border-color ease-out 0.2s;
+  cursor: pointer;
   &:hover {
-    border-color: #4E5969;
+    border-color: #4e5969;
     ${IconPart} {
       transform: translateY(-12px);
     }
@@ -51,16 +54,29 @@ interface Props {
   name: string
 }
 
-export const Card: FC<Props> = (props) => {
-  const style = { "--pack": "\"akar-icons\"", "--icon": "\"air\"" } as React.CSSProperties;
+export const Card: FC<Props> = props => {
+  const selectionStore = useStore(SelectionStore)
+
+  const style = {
+    '--pack': '"akar-icons"',
+    '--icon': '"air"',
+  } as React.CSSProperties
   return (
-    <Container style={style}>
+    <Container
+      style={style}
+      onClick={() => {
+        selectionStore.setViewing(props.name)
+      }}
+    >
       <IconPart>
-        <be-icon name={props.name} size="40" color="currentColor" stroke="1.8" />
+        <be-icon
+          name={props.name}
+          size='40'
+          color='currentColor'
+          stroke='1.8'
+        />
       </IconPart>
-      <LabelPart>
-        {props.name}
-      </LabelPart>
+      <LabelPart>{props.name}</LabelPart>
     </Container>
   )
 }
