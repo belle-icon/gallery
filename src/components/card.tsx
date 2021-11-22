@@ -9,58 +9,94 @@ const IconPart = styled.div`
   height: 100%;
   justify-content: center;
   align-items: center;
-  transform: translateY(0);
-  transition: all ease-out 0.2s;
+  pointer-events: none;
+
+  & be-icon {
+    transform: translateY(0);
+    transition: transform ease-out 0.2s;
+  }
 `
 
-const LabelPart = styled.div`
-  position: absolute;
-  width: 100%;
-  font-size: 12px;
-  word-break: break-word;
-  text-align: center;
-  color: #4e5969;
-  vertical-align: middle;
-  bottom: 10px;
-  opacity: 0;
-  transition: all ease-out 0.2s;
-  transform: translateY(0px);
-`
 
 const Container = styled.div`
   width: 120px;
   height: 120px;
-  border-radius: 30px;
-  border: solid 4px #d3d3d3;
+  border-radius: 8px;
   box-shadow: 3px 3px 13px 0px rgb(0 0 0 / 2%);
   background-color: #ffffff;
   position: relative;
-  box-sizing: border-box;
-  transition: border-color ease-out 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  user-select: none;
   cursor: pointer;
+  box-sizing: border-box;
+  border: 3px solid white;
+  transition: border-color ease-out 0.3s;
+
+  &::before {
+    content: var(--pack);
+    transform: scale(0.8);
+    font-size: 12px;
+    position: absolute;
+    left: -9px;
+    top: -5px;
+    background-color: white;
+    padding: 3px 6px;
+    border-radius: 8px 0 8px 0;
+    color: #fff;
+    transition: background-color ease-out 0.3s;
+  }
+
+  &::after {
+    content: var(--icon);
+    position: absolute;
+    font-size: 12px;
+    word-break: break-word;
+    text-align: center;
+    color: green;
+    vertical-align: middle;
+    bottom: 3px;
+    opacity: 0;
+    transition: all ease-out 0.2s;
+  }
+
   &:hover {
-    border-color: #4e5969;
-    ${IconPart} {
-      transform: translateY(-12px);
+    border-color: green;
+    &::before {
+      background-color: green;
     }
-    ${LabelPart} {
+    &::after {
+      transform: translateY(-10px);
       opacity: 1;
-      transform: translateY(-12px);
+    }
+    & be-icon {
+      transform: translateY(-2px);
     }
   }
 `
 
 interface Props {
   name: string
+  pack: string
+  icon: string
+}
+
+const MAX_DISP_LEN = 12;
+
+function displayName(name: string) {
+  return name.length > (MAX_DISP_LEN+3) ? name.slice(0, MAX_DISP_LEN) + '...' : name;
 }
 
 export const Card: FC<Props> = props => {
   const selectionStore = useStore(SelectionStore)
 
   const style = {
-    '--pack': '"akar-icons"',
-    '--icon': '"air"',
+    '--pack': `"${props.pack}"`,
+    '--icon': `"${displayName(props.icon)}"`,
   } as React.CSSProperties
+
   return (
     <Container
       style={style}
@@ -71,12 +107,11 @@ export const Card: FC<Props> = props => {
       <IconPart>
         <be-icon
           name={props.name}
-          size='40'
+          size='24'
           color='currentColor'
           stroke='1.8'
         />
       </IconPart>
-      <LabelPart>{props.name}</LabelPart>
     </Container>
   )
 }
