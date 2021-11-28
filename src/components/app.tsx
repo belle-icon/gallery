@@ -10,6 +10,7 @@ import { SelectionStore } from '../stores/selection.store'
 import { useAsyncMemo } from 'use-async-memo'
 import { ViewingModal } from './viewing-modal'
 import { parseIcons } from '../utils/decompress'
+import { Dexie } from 'dexie'
 
 const Root = styled.div`
   padding: 48px 24px;
@@ -56,6 +57,12 @@ interface IIconInfo {
 // FIXME: card::before positinging
 // FIXME: configurable url in line 64 and 66
 
+// TODO: cache responses by version
+var db = new Dexie("BelleDB");
+db.version(1).stores({
+    resources: "name,content"
+});
+
 export const App: FC = () => {
   // TODO: cache responses
   // FIXME: why request two times?
@@ -70,9 +77,12 @@ export const App: FC = () => {
           .then(data => parseTsv(data)),
         fetch('https://unpkg.com/@belle-icon/icons/svg.svg.gz')
           .then(parseIcons)
-          .then(icons => {
-            for (const icon of icons.slice(0, 10)) {
-              localStorage.setItem(icon.name, icon.content)
+          .then(async (icons) => {
+            try {
+              await db.table("resources").clear()
+              await db.table("resources").add({ name: "icons", content: JSON.stringify(icons)})
+            } catch (e) {
+              alert (`Error: ${e}`);
             }
           })
       ]),
@@ -112,6 +122,8 @@ export const App: FC = () => {
                       const { columnIndex, rowIndex, style } = args
                       const index = rowIndex * colCount + columnIndex
                       const iconInfo = info[index]
+                      if (!iconInfo)
+                        return (<></>)
                       const pack = sources[iconInfo.pack_index]
                       const icon = iconInfo.icon_name;
                       const name = `${pack.abbr}:${icon}`
