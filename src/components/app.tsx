@@ -9,6 +9,7 @@ import { Provider } from 'reto'
 import { SelectionStore } from '../stores/selection.store'
 import { useAsyncMemo } from 'use-async-memo'
 import { ViewingModal } from './viewing-modal'
+import { parseIcons } from '../utils/decompress'
 
 const Root = styled.div`
   padding: 48px 24px;
@@ -52,20 +53,28 @@ interface IIconInfo {
   pack_index: number
 }
 
-// FIXME: initial page loading is extremely slow (batch load script?)
 // FIXME: card::before positinging
 // FIXME: configurable url in line 64 and 66
 
 export const App: FC = () => {
+  // TODO: cache responses
+  // FIXME: why request two times?
   const meta = useAsyncMemo(
     () =>
       Promise.all([
         fetch(
-          'https://unpkg.com/@belle-icon/icons@0.2.1/meta/sources.json'
+          'https://unpkg.com/@belle-icon/icons/meta/sources.json'
         ).then(data => data.json()),
-        fetch('https://unpkg.com/@belle-icon/icons@0.2.1/meta/info.tsv')
+        fetch('https://unpkg.com/@belle-icon/icons/meta/info.tsv')
           .then(data => data.text())
           .then(data => parseTsv(data)),
+        fetch('https://unpkg.com/@belle-icon/icons/svg.svg.gz')
+          .then(parseIcons)
+          .then(icons => {
+            for (const icon of icons.slice(0, 10)) {
+              localStorage.setItem(icon.name, icon.content)
+            }
+          })
       ]),
     []
   )
