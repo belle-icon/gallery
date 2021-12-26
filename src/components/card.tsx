@@ -38,10 +38,11 @@ const Container = styled.div`
   &::before {
     content: var(--pack);
     transform: scale(0.8);
+    transform-origin: top left;
     font-size: 12px;
     position: absolute;
-    left: -9px;
-    top: -5px;
+    left: -2px;
+    top: -2px;
     background-color: white;
     padding: 3px 6px;
     border-radius: 8px 0 8px 0;
