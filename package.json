@@ -30,7 +30,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -53,6 +54,9 @@
   "devDependencies": {
     "@types/pako": "^1.0.2",
     "@types/react-virtualized-auto-sizer": "^1.0.1",
-    "@types/react-window": "^1.8.5"
+    "@types/react-window": "^1.8.5",
+    "husky": "^7.0.0",
+    "prettier": "^2.5.1",
+    "pretty-quick": "^3.1.3"
   }
 }
