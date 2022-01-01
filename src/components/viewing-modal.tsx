@@ -7,6 +7,7 @@ import { SelectionStore } from '../stores/selection.store'
 
 const Container = styled.div`
   position: fixed;
+  z-index: 999;
   bottom: 100px;
   left: 50%;
   transform: translateX(-50%);

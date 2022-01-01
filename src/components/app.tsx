@@ -15,9 +15,20 @@ import { staged } from 'staged-components'
 const Root = styled.div`
   padding: 48px 24px;
   width: 80vw;
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
-  font-family: 'PingFang SC';
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+`
+
+const TabsContainer = styled.div`
+  flex: 0;
+`
+
+const IconsContainer = styled.div`
+  flex: 1;
 `
 
 interface cellArgs {
@@ -108,10 +119,12 @@ export const App = staged(() => {
       <>
         <GlobalStyle />
         <Provider of={SelectionStore} memo>
+          <ViewingModal />
           <Root>
-            <ViewingModal />
-            <Tabs />
-            <div style={{ width: '100%', height: '800px' }}>
+            <TabsContainer>
+              <Tabs />
+            </TabsContainer>
+            <IconsContainer>
               <AutoSizer>
                 {({ height, width }) => {
                   const colCount = Math.floor(width / CONTAINER_SIZE)
@@ -143,7 +156,7 @@ export const App = staged(() => {
                   )
                 }}
               </AutoSizer>
-            </div>
+            </IconsContainer>
           </Root>
         </Provider>
       </>
