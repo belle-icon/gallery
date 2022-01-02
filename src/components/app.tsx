@@ -13,7 +13,7 @@ import { Dexie } from 'dexie'
 import { staged } from 'staged-components'
 
 const Root = styled.div`
-  padding: 48px 24px;
+  padding: 48px 24px 0;
   width: 80vw;
   max-width: 960px;
   margin: 0 auto;

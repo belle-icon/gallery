@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useStore } from 'reto'
 import styled from 'styled-components'
 import { SelectionStore } from '../stores/selection.store'
@@ -16,7 +16,6 @@ const IconPart = styled.div`
     transition: transform ease-out 0.2s;
   }
 `
-
 
 const Container = styled.div`
   width: 120px;
@@ -84,10 +83,12 @@ interface Props {
   icon: string
 }
 
-const MAX_DISP_LEN = 12;
+const MAX_DISP_LEN = 12
 
 function displayName(name: string) {
-  return name.length > (MAX_DISP_LEN+3) ? name.slice(0, MAX_DISP_LEN) + '...' : name;
+  return name.length > MAX_DISP_LEN + 3
+    ? name.slice(0, MAX_DISP_LEN) + '...'
+    : name
 }
 
 export const Card: FC<Props> = props => {
@@ -98,6 +99,16 @@ export const Card: FC<Props> = props => {
     '--icon': `"${displayName(props.icon)}"`,
   } as React.CSSProperties
 
+  const [loaded, setLoaded] = useState(true)
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      setLoaded(true)
+    }, 300)
+    return () => {
+      window.clearTimeout(timeout)
+    }
+  }, [])
+
   return (
     <Container
       style={style}
@@ -106,12 +117,14 @@ export const Card: FC<Props> = props => {
       }}
     >
       <IconPart>
-        <be-icon
-          name={props.name}
-          size='24'
-          color='currentColor'
-          stroke='1.8'
-        />
+        {loaded && (
+          <be-icon
+            name={props.name}
+            size='24'
+            color='currentColor'
+            stroke='1.8'
+          />
+        )}
       </IconPart>
     </Container>
   )
