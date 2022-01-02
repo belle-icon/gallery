@@ -112,8 +112,9 @@ export const Card: FC<Props> = props => {
   return (
     <Container
       style={style}
-      onClick={() => {
+      onClick={e => {
         selectionStore.setViewing(props.name)
+        e.stopPropagation()
       }}
     >
       <IconPart>
