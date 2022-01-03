@@ -1,0 +1,13 @@
+@keyframes action {
+  0% {
+    stroke-width: 1px;
+  }
+
+  100% {
+    stroke-width: 8px;
+  }
+}
+
+.logo {
+  animation: action 2s ease-out alternate infinite;
+}
