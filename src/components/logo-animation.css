@@ -8,6 +8,23 @@
   }
 }
 
+@keyframes strokeOffset {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+
+  70% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: 1000;
+  }
+}
+
 .logo {
-  animation: action 2s ease-out alternate infinite;
+  stroke-dasharray: 1000;
+
+  animation: strokeOffset 6s ease-in-out forwards infinite,
+    action 2.3s ease-out alternate infinite;
 }
