@@ -1,8 +1,6 @@
 import styled from 'styled-components'
 import { GlobalStyle } from './global-style'
 import { Card } from './card'
-// import { FixedSizeGrid as Grid } from 'react-window'
-// import AutoSizer from 'react-virtualized-auto-sizer'
 import { Tabs } from './tabs'
 import { Provider } from 'reto'
 import { SelectionStore } from '../stores/selection.store'
