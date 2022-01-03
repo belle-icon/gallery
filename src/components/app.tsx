@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import { GlobalStyle } from './global-style'
 import { Card } from './card'
-import { FixedSizeGrid as Grid } from 'react-window'
-import AutoSizer from 'react-virtualized-auto-sizer'
+// import { FixedSizeGrid as Grid } from 'react-window'
+// import AutoSizer from 'react-virtualized-auto-sizer'
 import { Tabs } from './tabs'
 import { Provider } from 'reto'
 import { SelectionStore } from '../stores/selection.store'
@@ -11,31 +11,23 @@ import { ViewingModal } from './viewing-modal'
 import { parseIcons } from '../utils/decompress'
 import { Dexie } from 'dexie'
 import { staged } from 'staged-components'
+import { Logo } from './logo'
+import { WindowScroller, Grid } from 'react-virtualized'
+import 'react-virtualized/styles.css'
 
 const Root = styled.div`
-  padding: 48px 24px 0;
-  width: 80vw;
-  max-width: 960px;
+  padding-top: 48px;
+  width: 900px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100%;
 `
 
 const TabsContainer = styled.div`
-  flex: 0;
+  /* flex: 0; */
 `
 
 const IconsContainer = styled.div`
-  flex: 1;
+  /* flex: 1; */
 `
-
-interface cellArgs {
-  columnIndex: number
-  rowIndex: number
-  style: any
-}
 
 function parseTsv(str: string, header: boolean = true) {
   const lines = str.trim().split('\n')
@@ -115,30 +107,35 @@ export const App = staged(() => {
     const CONTAINER_SIZE = 150
     const TOTAL = info.length
 
+    const contentWidth = 900
+
     return (
       <>
         <GlobalStyle />
         <Provider of={SelectionStore} memo>
           <ViewingModal />
-          <Root>
-            <TabsContainer>
-              <Tabs />
-            </TabsContainer>
-            <IconsContainer>
-              <AutoSizer>
-                {({ height, width }) => {
-                  const colCount = Math.floor(width / CONTAINER_SIZE)
-                  return (
+          <WindowScroller>
+            {({ height, isScrolling, registerChild, scrollTop }) => {
+              const colCount = Math.floor(contentWidth / CONTAINER_SIZE)
+              return (
+                <Root>
+                  <Logo />
+                  <TabsContainer>
+                    <Tabs />
+                  </TabsContainer>
+                  <IconsContainer ref={registerChild}>
                     <Grid
                       columnCount={colCount}
                       columnWidth={CONTAINER_SIZE}
-                      height={height}
+                      autoHeight={true}
+                      autoWidth={true}
                       rowCount={Math.ceil(TOTAL / colCount)}
                       rowHeight={CONTAINER_SIZE}
-                      width={width}
-                      style={{ overflowX: 'hidden' }}
-                    >
-                      {(args: cellArgs) => {
+                      width={contentWidth}
+                      height={height}
+                      scrollTop={scrollTop}
+                      isScrolling={isScrolling}
+                      cellRenderer={args => {
                         const { columnIndex, rowIndex, style } = args
                         const index = rowIndex * colCount + columnIndex
                         const iconInfo = info[index]
@@ -147,17 +144,17 @@ export const App = staged(() => {
                         const icon = iconInfo.icon_name
                         const name = `${pack.abbr}:${icon}`
                         return (
-                          <div style={style}>
+                          <div style={style} key={index}>
                             <Card name={name} pack={pack.name} icon={icon} />
                           </div>
                         )
                       }}
-                    </Grid>
-                  )
-                }}
-              </AutoSizer>
-            </IconsContainer>
-          </Root>
+                    />
+                  </IconsContainer>
+                </Root>
+              )
+            }}
+          </WindowScroller>
         </Provider>
       </>
     )
