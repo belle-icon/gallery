@@ -12,6 +12,8 @@ import { staged } from 'staged-components'
 import { Logo } from './logo'
 import { WindowScroller, Grid } from 'react-virtualized'
 import 'react-virtualized/styles.css'
+import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
+import { SearchIcon } from '@chakra-ui/icons'
 
 const Root = styled.div`
   width: 900px;
@@ -21,9 +23,11 @@ const Root = styled.div`
 const Header = styled.div`
   text-align: center;
   padding: 36px 0;
-  svg {
-    display: inline-block;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
 `
 
 const TabsContainer = styled.div`
@@ -131,6 +135,18 @@ export const App = staged(() => {
                 <Root>
                   <Header>
                     <Logo />
+                    <InputGroup
+                      size='lg'
+                      maxWidth={600}
+                      backgroundColor='#fff'
+                      borderRadius={100}
+                    >
+                      <InputLeftElement
+                        pointerEvents='none'
+                        children={<SearchIcon color='gray.300' />}
+                      />
+                      <Input placeholder='Search icons' borderRadius={100} />
+                    </InputGroup>
                   </Header>
                   <TabsContainer>
                     <Tabs />
