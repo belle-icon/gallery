@@ -1,50 +1,49 @@
-import React, { FC, useState } from 'react';
-import styled from 'styled-components';
+import React, { FC, useState } from 'react'
+import styled from 'styled-components'
 
-const categories = ['Web', 'Arrows', 'Text', 'Socail'];
+const categories = ['Web', 'Arrows', 'Text', 'Socail']
 
 const Container = styled.div`
   display: flex;
-  padding-bottom: 30px;
-`;
+`
 
 const Item = styled.div<{
-  active: boolean;
+  active: boolean
 }>`
   flex: none;
   margin-right: 40px;
   font-size: 20px;
   line-height: 1.6;
-  color: ${(props) => (props.active ? '#4E5969' : '#B0B0B0')};
+  color: ${props => (props.active ? '#4E5969' : '#B0B0B0')};
   font-weight: 500;
   cursor: pointer;
-`;
+`
 
 interface Props {}
 
-export const Tabs: FC<Props> = (props) => {
-  const [selected, setSelected] = useState('');
+export const Tabs: FC<Props> = props => {
+  const [selected, setSelected] = useState('')
   return (
     <Container>
       <Item
         active={selected === ''}
         onClick={() => {
-          setSelected('');
+          setSelected('')
         }}
       >
         All
       </Item>
-      {categories.map((category) => (
+      {categories.map(category => (
         <Item
           key={category}
           active={selected === category}
           onClick={() => {
-            setSelected(category);
+            setSelected(category)
           }}
         >
           {category}
         </Item>
       ))}
     </Container>
-  );
-};
+  )
+}

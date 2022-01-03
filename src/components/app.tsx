@@ -14,17 +14,29 @@ import { WindowScroller, Grid } from 'react-virtualized'
 import 'react-virtualized/styles.css'
 
 const Root = styled.div`
-  padding-top: 48px;
   width: 900px;
   margin: 0 auto;
 `
 
+const Header = styled.div`
+  text-align: center;
+  padding: 36px 0;
+  svg {
+    display: inline-block;
+  }
+`
+
 const TabsContainer = styled.div`
-  /* flex: 0; */
+  background-color: rgb(246, 248, 250);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 12px 0;
+  margin-bottom: 24px;
 `
 
 const IconsContainer = styled.div`
-  /* flex: 1; */
+  background-color: inherit;
 `
 
 function parseTsv(str: string, header: boolean = true) {
@@ -117,7 +129,9 @@ export const App = staged(() => {
               const colCount = Math.floor(contentWidth / CONTAINER_SIZE)
               return (
                 <Root>
-                  <Logo />
+                  <Header>
+                    <Logo />
+                  </Header>
                   <TabsContainer>
                     <Tabs />
                   </TabsContainer>
