@@ -1,17 +1,15 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/gallery/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web site created using create-react-app"/><link rel="apple-touch-icon" href="/gallery/logo192.png"/><link rel="manifest" href="/gallery/manifest.json"/><script src="https://unpkg.com/@belle-icon/component" type="module"></script><script src="https://unpkg.com/dexie/dist/dexie.js"></script><script type="module" async>var db = new Dexie("BelleDB");
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/gallery/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web site created using create-react-app"/><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/><link rel="apple-touch-icon" href="/gallery/logo192.png"/><link rel="manifest" href="/gallery/manifest.json"/><script src="https://unpkg.com/@belle-icon/component" type="module"></script><script src="https://unpkg.com/dexie/dist/dexie.js"></script><script type="module" defer="defer">var db = new Dexie('BelleDB')
       db.version(1).stores({
-          resources: "name,content"
-      });
+        resources: 'name,content',
+      })
       const icons = JSON.parse(
-        (await db
-          .table("resources")
-          .where('name')
-          .equals('icons').first()).content
+        (await db.table('resources').where('name').equals('icons').first())
+          .content
       )
-      const iconMap = Object.fromEntries(icons.map(i => [i.name, i.content]));
+      const iconMap = Object.fromEntries(icons.map(i => [i.name, i.content]))
       class CustomBackend extends BelleBackend {
         async fetchIcon(name) {
           return iconMap[name] || BelleBackend.fetchIcon(name)
         }
       }
-      belleStore.backend = new CustomBackend();</script><title>React App</title><script defer="defer" src="/gallery/static/js/main.61e5e8a3.js"></script><link href="/gallery/static/css/main.a7919d99.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+      belleStore.backend = new CustomBackend()</script><title>Belle Icons</title><script defer="defer" src="/gallery/static/js/main.123b8367.js"></script><link href="/gallery/static/css/main.b91f56dc.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
