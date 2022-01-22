@@ -101,7 +101,7 @@ export const Card: FC<Props> = props => {
 
   const [loaded, setLoaded] = useState(true)
   useEffect(() => {
-    console.log('load', props.pack, props.name)
+    // console.log('load', props.pack, props.name)
     const timeout = window.setTimeout(() => {
       setLoaded(true)
     }, 300)

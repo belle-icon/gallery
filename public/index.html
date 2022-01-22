@@ -9,32 +9,37 @@
       name="description"
       content="Web site created using create-react-app"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <script src="https://unpkg.com/@belle-icon/component" type="module"></script>
+    <script
+      src="https://unpkg.com/@belle-icon/component"
+      type="module"
+    ></script>
     <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
-    <script type="module" async>
-      var db = new Dexie("BelleDB");
+    <script type="module" defer>
+      var db = new Dexie('BelleDB')
       db.version(1).stores({
-          resources: "name,content"
-      });
+        resources: 'name,content',
+      })
       const icons = JSON.parse(
-        (await db
-          .table("resources")
-          .where('name')
-          .equals('icons').first()).content
+        (await db.table('resources').where('name').equals('icons').first())
+          .content
       )
-      const iconMap = Object.fromEntries(icons.map(i => [i.name, i.content]));
+      const iconMap = Object.fromEntries(icons.map(i => [i.name, i.content]))
       class CustomBackend extends BelleBackend {
         async fetchIcon(name) {
           return iconMap[name] || BelleBackend.fetchIcon(name)
         }
       }
-      belleStore.backend = new CustomBackend();
+      belleStore.backend = new CustomBackend()
     </script>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
@@ -45,7 +50,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>Belle Icons</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
