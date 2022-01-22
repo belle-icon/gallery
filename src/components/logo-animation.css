@@ -1,30 +1,21 @@
-@keyframes action {
-  0% {
-    stroke-width: 1px;
-  }
-
-  100% {
-    stroke-width: 8px;
-  }
-}
-
 @keyframes strokeOffset {
   0% {
     stroke-dashoffset: 1000;
   }
 
-  70% {
+  50%,
+  80% {
     stroke-dashoffset: 0;
   }
 
   100% {
-    stroke-dashoffset: 1000;
+    stroke-dashoffset: -1000;
   }
 }
 
-.logo {
+.logo .overlay {
   stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
 
-  animation: strokeOffset 6s ease-in-out forwards infinite,
-    action 2.3s ease-out alternate infinite;
+  animation: strokeOffset 6s ease-in-out forwards infinite;
 }
