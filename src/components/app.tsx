@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 import { GlobalStyle } from './global-style'
 import { Card } from './card'
-import { Tabs } from './tabs'
+import { Intro } from './intro'
+// import { Tabs } from './tabs'
+import { Header } from './header'
 import { Provider } from 'reto'
 import { SelectionStore } from '../stores/selection.store'
 import { useAsyncMemo } from 'use-async-memo'
@@ -9,35 +11,29 @@ import { ViewingModal } from './viewing-modal'
 import { parseIcons } from '../utils/decompress'
 import { Dexie } from 'dexie'
 import { staged } from 'staged-components'
-import { Logo } from './logo'
 import { WindowScroller, Grid } from 'react-virtualized'
 import 'react-virtualized/styles.css'
-import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
+import { Input, InputGroup, InputLeftElement, Box } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
 
 const Root = styled.div`
+  width: 100%;
+  height: 100%;
+`
+
+const Main = styled.div`
   width: 900px;
   margin: 0 auto;
 `
 
-const Header = styled.div`
-  text-align: center;
-  padding: 36px 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 24px;
-`
-
-const TabsContainer = styled.div`
-  background-color: rgb(246, 248, 250);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  padding: 12px 0;
-  margin-bottom: 24px;
-`
+// const TabsContainer = styled.div`
+//   background-color: rgb(246, 248, 250);
+//   position: sticky;
+//   top: 0;
+//   z-index: 1000;
+//   padding: 12px 0;
+//   margin-bottom: 24px;
+// `
 
 const IconsContainer = styled.div`
   background-color: inherit;
@@ -133,52 +129,64 @@ export const App = staged(() => {
               const colCount = Math.floor(contentWidth / CONTAINER_SIZE)
               return (
                 <Root>
-                  <Header>
-                    <Logo />
-                    <InputGroup
-                      size='lg'
-                      maxWidth={600}
-                      backgroundColor='#fff'
-                      borderRadius={100}
-                    >
-                      <InputLeftElement
-                        pointerEvents='none'
-                        children={<SearchIcon color='gray.300' />}
-                      />
-                      <Input placeholder='Search icons' borderRadius={100} />
-                    </InputGroup>
-                  </Header>
-                  <TabsContainer>
+                  <Header></Header>
+                  <Main>
+                    <Intro></Intro>
+                    <Box pr='32px' py='16' w='100%' id='search'>
+                      <InputGroup
+                        size='lg'
+                        backgroundColor='#fff'
+                        borderRadius={8}
+                        boxShadow='3px 3px 13px 0px rgb(0 0 0 / 2%)'
+                        padding='3px 12px'
+                      >
+                        <InputLeftElement
+                          pointerEvents='none'
+                          children={<SearchIcon color='gray.300' />}
+                          left='unset'
+                          top='unset'
+                        />
+                        <Input
+                          placeholder='Search 62345 Icons'
+                          border='none'
+                          boxShadow='none !important'
+                          fontSize={14}
+                          color='green'
+                        />
+                      </InputGroup>
+                    </Box>
+                    {/* <TabsContainer>
                     <Tabs />
-                  </TabsContainer>
-                  <IconsContainer ref={registerChild}>
-                    <Grid
-                      columnCount={colCount}
-                      columnWidth={CONTAINER_SIZE}
-                      autoHeight={true}
-                      autoWidth={true}
-                      rowCount={Math.ceil(TOTAL / colCount)}
-                      rowHeight={CONTAINER_SIZE}
-                      width={contentWidth}
-                      height={height}
-                      scrollTop={scrollTop}
-                      isScrolling={isScrolling}
-                      cellRenderer={args => {
-                        const { columnIndex, rowIndex, style } = args
-                        const index = rowIndex * colCount + columnIndex
-                        const iconInfo = info[index]
-                        if (!iconInfo) return <></>
-                        const pack = sources[iconInfo.pack_index]
-                        const icon = iconInfo.icon_name
-                        const name = `${pack.abbr}:${icon}`
-                        return (
-                          <div style={style} key={index}>
-                            <Card name={name} pack={pack.name} icon={icon} />
-                          </div>
-                        )
-                      }}
-                    />
-                  </IconsContainer>
+                  </TabsContainer> */}
+                    <IconsContainer ref={registerChild}>
+                      <Grid
+                        columnCount={colCount}
+                        columnWidth={CONTAINER_SIZE}
+                        autoHeight={true}
+                        autoWidth={true}
+                        rowCount={Math.ceil(TOTAL / colCount)}
+                        rowHeight={CONTAINER_SIZE}
+                        width={contentWidth}
+                        height={height}
+                        scrollTop={scrollTop}
+                        isScrolling={isScrolling}
+                        cellRenderer={args => {
+                          const { columnIndex, rowIndex, style } = args
+                          const index = rowIndex * colCount + columnIndex
+                          const iconInfo = info[index]
+                          if (!iconInfo) return <></>
+                          const pack = sources[iconInfo.pack_index]
+                          const icon = iconInfo.icon_name
+                          const name = `${pack.abbr}:${icon}`
+                          return (
+                            <div style={style} key={index}>
+                              <Card name={name} pack={pack.name} icon={icon} />
+                            </div>
+                          )
+                        }}
+                      />
+                    </IconsContainer>
+                  </Main>
                 </Root>
               )
             }}
