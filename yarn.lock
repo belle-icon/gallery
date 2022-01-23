@@ -2397,6 +2397,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/fuzzyset@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.npmmirror.com/@types/fuzzyset/download/@types/fuzzyset-1.0.4.tgz#23c139db81a98796c5498165fe6e7d4b38fa02bc"
+  integrity sha512-i0/7X4Pulqo/2QDpq+FKQsh1SDrKAQvi4kiPn56WcAQbmZbJbOIYK/KupA+BVD3dCbU4mvB3exk22v9QsIVt1Q==
+
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
   resolved "https://registry.npmmirror.com/@types/graceful-fs/download/@types/graceful-fs-4.1.5.tgz?cache=0&sync_timestamp=1637265802646&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fgraceful-fs%2Fdownload%2F%40types%2Fgraceful-fs-4.1.5.tgz#21ffba0d98da4350db64891f92a9e5db3cdb4e15"
@@ -5269,6 +5274,11 @@ functional-red-black-tree@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmmirror.com/functional-red-black-tree/download/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
+
+fuzzyset@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.npmmirror.com/fuzzyset/download/fuzzyset-1.0.7.tgz#dbef22072ab3315b0ded28a235c1006ec9abd3fe"
+  integrity sha512-RjcvWPK6v+FHwierTqnjXjtF6fgZCOVucORlOt4ZEJRrHUqt4tRiCIzg1Zm0XMSAZGMTBCSHPx4IgdBH3m0VZg==
 
 gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"

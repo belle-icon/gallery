@@ -15,6 +15,9 @@ import 'react-virtualized/styles.css'
 import { Input, InputGroup, InputLeftElement, Box } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
 import { GlobalIconConfigStore } from '../stores/global-icon-config.store'
+import { useMemo, useState } from 'react'
+import FuzzySet from 'fuzzyset'
+import { useDebounce } from 'ahooks'
 
 const Root = styled.div`
   width: 100%;
@@ -84,7 +87,7 @@ export const App = staged(() => {
       () => fetch(`${urlPrefix}/meta/sources.json`).then(data => data.json()),
       [urlPrefix]
     )
-    const info = useAsyncMemo<IIconInfo[]>(async () => {
+    const iconInfoList = useAsyncMemo<IIconInfo[]>(async () => {
       const data = await fetch(`${urlPrefix}/meta/info.tsv`)
       const text = await data.text()
       return parseTsv(text) as any as IIconInfo[]
@@ -106,86 +109,128 @@ export const App = staged(() => {
         })
       return true
     }, [urlPrefix])
-    if (!(sources && info && iconLoaded)) return null
-    const CONTAINER_SIZE = 150
-    const TOTAL = info.length
+    if (!(sources && iconInfoList && iconLoaded)) return null
 
-    const contentWidth = 900
+    return () => {
+      const fuzzySet = useMemo(
+        () => FuzzySet(iconInfoList.map(iconInfo => iconInfo.icon_name)),
+        [iconInfoList]
+      )
 
-    return (
-      <>
-        <GlobalStyle />
-        <Provider of={SelectionStore} memo>
-          <ViewingModal />
-          <WindowScroller>
-            {({ height, isScrolling, registerChild, scrollTop }) => {
-              const colCount = Math.floor(contentWidth / CONTAINER_SIZE)
-              return (
-                <Root>
-                  <Header></Header>
-                  <Main>
-                    <Intro></Intro>
-                    <Box pr='32px' py='16' w='100%' id='search'>
-                      <InputGroup
-                        size='lg'
-                        backgroundColor='#fff'
-                        borderRadius={8}
-                        boxShadow='3px 3px 13px 0px rgb(0 0 0 / 2%)'
-                        padding='3px 12px'
-                      >
-                        <InputLeftElement
-                          pointerEvents='none'
-                          children={<SearchIcon color='gray.300' />}
-                          left='unset'
-                          top='unset'
-                        />
-                        <Input
-                          placeholder='Search 62345 Icons'
-                          border='none'
-                          boxShadow='none !important'
-                          fontSize={14}
-                          color='green'
-                        />
-                      </InputGroup>
-                    </Box>
-                    {/* <TabsContainer>
+      const [searchValue, setSearchValue] = useState('')
+      const searchValueDebounced = useDebounce(searchValue, {
+        wait: 500,
+        trailing: true,
+        leading: false,
+      })
+
+      const filteredList = useMemo(() => {
+        if (!searchValueDebounced) return iconInfoList
+        console.log(fuzzySet.get(searchValueDebounced))
+        const similarMap = new Map<string, number>()
+        fuzzySet.get(searchValueDebounced)?.forEach(item => {
+          similarMap.set(item[1], item[0])
+        })
+        const result: { iconInfo: IIconInfo; score: number }[] = []
+        iconInfoList.forEach(iconInfo => {
+          const score = similarMap.get(iconInfo.icon_name)
+          if (!score) return
+          result.push({
+            iconInfo,
+            score,
+          })
+        })
+        return result
+          .sort((a, b) => b.score - a.score)
+          .map(item => item.iconInfo)
+      }, [fuzzySet, searchValueDebounced])
+
+      const CONTAINER_SIZE = 150
+      const TOTAL = filteredList.length
+
+      const contentWidth = 900
+
+      return (
+        <>
+          <GlobalStyle />
+          <Provider of={SelectionStore} memo>
+            <ViewingModal />
+            <WindowScroller>
+              {({ height, isScrolling, registerChild, scrollTop }) => {
+                const colCount = Math.floor(contentWidth / CONTAINER_SIZE)
+                return (
+                  <Root>
+                    <Header></Header>
+                    <Main>
+                      <Intro></Intro>
+                      <Box pr='32px' py='16' w='100%' id='search'>
+                        <InputGroup
+                          size='lg'
+                          backgroundColor='#fff'
+                          borderRadius={8}
+                          boxShadow='3px 3px 13px 0px rgb(0 0 0 / 2%)'
+                          padding='3px 12px'
+                        >
+                          <InputLeftElement
+                            pointerEvents='none'
+                            children={<SearchIcon color='gray.300' />}
+                            left='unset'
+                            top='unset'
+                          />
+                          <Input
+                            placeholder='Search 62345 Icons'
+                            border='none'
+                            boxShadow='none !important'
+                            fontSize={14}
+                            color='green'
+                            value={searchValue}
+                            onChange={e => setSearchValue(e.target.value)}
+                          />
+                        </InputGroup>
+                      </Box>
+                      {/* <TabsContainer>
                     <Tabs />
                   </TabsContainer> */}
-                    <IconsContainer ref={registerChild}>
-                      <Grid
-                        columnCount={colCount}
-                        columnWidth={CONTAINER_SIZE}
-                        autoHeight={true}
-                        autoWidth={true}
-                        rowCount={Math.ceil(TOTAL / colCount)}
-                        rowHeight={CONTAINER_SIZE}
-                        width={contentWidth}
-                        height={height}
-                        scrollTop={scrollTop}
-                        isScrolling={isScrolling}
-                        cellRenderer={args => {
-                          const { columnIndex, rowIndex, style } = args
-                          const index = rowIndex * colCount + columnIndex
-                          const iconInfo = info[index]
-                          if (!iconInfo) return <></>
-                          const pack = sources[iconInfo.pack_index]
-                          const icon = iconInfo.icon_name
-                          const name = `${pack.abbr}:${icon}`
-                          return (
-                            <div style={style} key={index}>
-                              <Card name={name} pack={pack.name} icon={icon} />
-                            </div>
-                          )
-                        }}
-                      />
-                    </IconsContainer>
-                  </Main>
-                </Root>
-              )
-            }}
-          </WindowScroller>
-        </Provider>
-      </>
-    )
+                      <IconsContainer ref={registerChild}>
+                        <Grid
+                          columnCount={colCount}
+                          columnWidth={CONTAINER_SIZE}
+                          autoHeight={true}
+                          autoWidth={true}
+                          rowCount={Math.ceil(TOTAL / colCount)}
+                          rowHeight={CONTAINER_SIZE}
+                          width={contentWidth}
+                          height={height}
+                          scrollTop={scrollTop}
+                          isScrolling={isScrolling}
+                          cellRenderer={args => {
+                            const { columnIndex, rowIndex, style } = args
+                            const index = rowIndex * colCount + columnIndex
+                            const iconInfo = filteredList[index]
+                            if (!iconInfo) return <></>
+                            const pack = sources[iconInfo.pack_index]
+                            const icon = iconInfo.icon_name
+                            const name = `${pack.abbr}:${icon}`
+                            return (
+                              <div style={style} key={index}>
+                                <Card
+                                  name={name}
+                                  pack={pack.name}
+                                  icon={icon}
+                                />
+                              </div>
+                            )
+                          }}
+                        />
+                      </IconsContainer>
+                    </Main>
+                  </Root>
+                )
+              }}
+            </WindowScroller>
+          </Provider>
+        </>
+      )
+    }
   }
 })
