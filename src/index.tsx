@@ -3,10 +3,14 @@ import './index.css'
 import { App } from './components/app'
 import reportWebVitals from './reportWebVitals'
 import { ChakraProvider } from '@chakra-ui/react'
+import { Provider } from 'reto'
+import { GlobalIconConfigStore } from './stores/global-icon-config.store'
 
 ReactDOM.render(
   <ChakraProvider>
-    <App />
+    <Provider of={GlobalIconConfigStore} memo>
+      <App />
+    </Provider>
   </ChakraProvider>,
   document.getElementById('root')
 )

@@ -2,9 +2,8 @@ import styled from 'styled-components'
 import { GlobalStyle } from './global-style'
 import { Card } from './card'
 import { Intro } from './intro'
-// import { Tabs } from './tabs'
 import { Header } from './header'
-import { Provider } from 'reto'
+import { Provider, useStore } from 'reto'
 import { SelectionStore } from '../stores/selection.store'
 import { useAsyncMemo } from 'use-async-memo'
 import { ViewingModal } from './viewing-modal'
@@ -15,6 +14,7 @@ import { WindowScroller, Grid } from 'react-virtualized'
 import 'react-virtualized/styles.css'
 import { Input, InputGroup, InputLeftElement, Box } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
+import { GlobalIconConfigStore } from '../stores/global-icon-config.store'
 
 const Root = styled.div`
   width: 100%;
@@ -25,15 +25,6 @@ const Main = styled.div`
   width: 900px;
   margin: 0 auto;
 `
-
-// const TabsContainer = styled.div`
-//   background-color: rgb(246, 248, 250);
-//   position: sticky;
-//   top: 0;
-//   z-index: 1000;
-//   padding: 12px 0;
-//   margin-bottom: 24px;
-// `
 
 const IconsContainer = styled.div`
   background-color: inherit;
@@ -84,6 +75,8 @@ export const App = staged(() => {
   )
   if (!packageJson) return null
   return () => {
+    const globalIconConfigStore = useStore(GlobalIconConfigStore)
+
     const { version } = packageJson
     const urlPrefix = `https://unpkg.com/@belle-icon/icons@${version}`
     // TODO: cache responses of sources and info

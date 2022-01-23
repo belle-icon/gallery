@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useStore } from 'reto'
 import styled from 'styled-components'
+import { GlobalIconConfigStore } from '../stores/global-icon-config.store'
 import { SelectionStore } from '../stores/selection.store'
 
 const IconPart = styled.div`
@@ -93,6 +94,7 @@ function displayName(name: string) {
 
 export const Card: FC<Props> = props => {
   const selectionStore = useStore(SelectionStore)
+  const globalIconConfigStore = useStore(GlobalIconConfigStore)
 
   const style = {
     '--pack': `"${props.pack}"`,
@@ -122,7 +124,7 @@ export const Card: FC<Props> = props => {
         {loaded && (
           <be-icon
             name={props.name}
-            size='24'
+            size={globalIconConfigStore.size}
             color='currentColor'
             stroke='1.8'
           />
